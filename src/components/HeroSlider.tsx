@@ -77,9 +77,6 @@ const HeroSlider = () => {
           <p className="text-lg md:text-xl text-muted-foreground mb-8">
             {slides[currentSlide].subtitle}
           </p>
-          <Button variant="hero" size="lg" onClick={scrollToAppointment}>
-            Book Your Test Now
-          </Button>
         </div>
       </div>
 
