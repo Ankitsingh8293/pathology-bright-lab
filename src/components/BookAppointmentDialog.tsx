@@ -11,7 +11,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Calendar, Clock } from "lucide-react";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Calendar, Clock, Settings } from "lucide-react";
 import { toast } from "sonner";
 
 interface BookAppointmentDialogProps {
@@ -26,6 +27,14 @@ const BookAppointmentDialog = ({ trigger }: BookAppointmentDialogProps) => {
     preferredDate: "",
     preferredTime: "",
     message: "",
+  });
+
+  // Admin Panel State
+  const [selectedSlot, setSelectedSlot] = useState<string>("morning");
+  const [isEditingSlots, setIsEditingSlots] = useState(false);
+  const [timeSlots, setTimeSlots] = useState({
+    morning: { start: "08:00", end: "14:00", label: "Morning" },
+    evening: { start: "17:00", end: "22:00", label: "Evening" },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -75,13 +84,114 @@ const BookAppointmentDialog = ({ trigger }: BookAppointmentDialogProps) => {
           </DialogDescription>
         </DialogHeader>
 
-        {/* Admin Availability Hours */}
-        <div className="bg-secondary/30 border border-border rounded-lg p-4 flex items-center gap-3">
-          <Clock className="w-5 h-5 text-primary flex-shrink-0" />
-          <div>
-            <p className="text-sm font-medium text-foreground">Available Hours</p>
-            <p className="text-sm text-muted-foreground">Monday - Saturday: 10:00 AM to 6:00 PM</p>
+        {/* Admin Panel */}
+        <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Settings className="w-5 h-5 text-primary flex-shrink-0" />
+              <p className="text-sm font-semibold text-foreground">Admin Panel - Select Time Slot</p>
+            </div>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsEditingSlots(!isEditingSlots)}
+              className="h-8 text-xs"
+            >
+              {isEditingSlots ? "Done" : "Edit Times"}
+            </Button>
           </div>
+
+          {/* Time Slot Selection */}
+          <ToggleGroup
+            type="single"
+            value={selectedSlot}
+            onValueChange={(value) => value && setSelectedSlot(value)}
+            className="grid grid-cols-2 gap-3 w-full"
+          >
+            <ToggleGroupItem
+              value="morning"
+              className="flex-col h-auto py-3 px-4 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary border-2 transition-all duration-200"
+            >
+              <span className="font-semibold text-sm">{timeSlots.morning.label}</span>
+              <span className="text-xs mt-1">
+                {timeSlots.morning.start} – {timeSlots.morning.end}
+              </span>
+            </ToggleGroupItem>
+
+            <ToggleGroupItem
+              value="evening"
+              className="flex-col h-auto py-3 px-4 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary border-2 transition-all duration-200"
+            >
+              <span className="font-semibold text-sm">{timeSlots.evening.label}</span>
+              <span className="text-xs mt-1">
+                {timeSlots.evening.start} – {timeSlots.evening.end}
+              </span>
+            </ToggleGroupItem>
+          </ToggleGroup>
+
+          {/* Edit Time Slots */}
+          {isEditingSlots && (
+            <div className="space-y-3 pt-2 border-t border-border animate-in fade-in-50 duration-200">
+              <div className="space-y-2">
+                <Label className="text-xs font-medium">Morning Slot</Label>
+                <div className="flex gap-2 items-center">
+                  <Input
+                    type="time"
+                    value={timeSlots.morning.start}
+                    onChange={(e) =>
+                      setTimeSlots({
+                        ...timeSlots,
+                        morning: { ...timeSlots.morning, start: e.target.value },
+                      })
+                    }
+                    className="h-8 text-xs"
+                  />
+                  <span className="text-xs text-muted-foreground">to</span>
+                  <Input
+                    type="time"
+                    value={timeSlots.morning.end}
+                    onChange={(e) =>
+                      setTimeSlots({
+                        ...timeSlots,
+                        morning: { ...timeSlots.morning, end: e.target.value },
+                      })
+                    }
+                    className="h-8 text-xs"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-xs font-medium">Evening Slot</Label>
+                <div className="flex gap-2 items-center">
+                  <Input
+                    type="time"
+                    value={timeSlots.evening.start}
+                    onChange={(e) =>
+                      setTimeSlots({
+                        ...timeSlots,
+                        evening: { ...timeSlots.evening, start: e.target.value },
+                      })
+                    }
+                    className="h-8 text-xs"
+                  />
+                  <span className="text-xs text-muted-foreground">to</span>
+                  <Input
+                    type="time"
+                    value={timeSlots.evening.end}
+                    onChange={(e) =>
+                      setTimeSlots({
+                        ...timeSlots,
+                        evening: { ...timeSlots.evening, end: e.target.value },
+                      })
+                    }
+                    className="h-8 text-xs"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
