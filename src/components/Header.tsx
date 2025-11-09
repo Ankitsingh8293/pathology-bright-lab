@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, FlaskConical } from "lucide-react";
+import BookAppointmentDialog from "@/components/BookAppointmentDialog";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -36,15 +37,10 @@ const Header = () => {
             <button onClick={() => scrollToSection("services")} className="text-sm font-medium text-foreground hover:text-primary transition-colors">
               Services
             </button>
-            <button onClick={() => scrollToSection("appointment")} className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-              Book Appointment
-            </button>
             <button onClick={() => scrollToSection("contact")} className="text-sm font-medium text-foreground hover:text-primary transition-colors">
               Contact Us
             </button>
-            <Button variant="hero" size="sm" onClick={() => scrollToSection("appointment")}>
-              Book Now
-            </Button>
+            <BookAppointmentDialog />
           </nav>
 
           {/* Mobile Menu Button */}
@@ -66,15 +62,16 @@ const Header = () => {
               <button onClick={() => scrollToSection("services")} className="text-sm font-medium text-foreground hover:text-primary transition-colors text-left py-2">
                 Services
               </button>
-              <button onClick={() => scrollToSection("appointment")} className="text-sm font-medium text-foreground hover:text-primary transition-colors text-left py-2">
-                Book Appointment
-              </button>
               <button onClick={() => scrollToSection("contact")} className="text-sm font-medium text-foreground hover:text-primary transition-colors text-left py-2">
                 Contact Us
               </button>
-              <Button variant="hero" size="sm" onClick={() => scrollToSection("appointment")} className="w-full">
-                Book Now
-              </Button>
+              <BookAppointmentDialog 
+                trigger={
+                  <Button variant="hero" size="sm" className="w-full">
+                    Book Appointment
+                  </Button>
+                }
+              />
             </div>
           </nav>
         )}
