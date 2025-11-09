@@ -14,12 +14,6 @@ const Index = () => {
       <Header />
       <main>
         <HeroSlider />
-        <section className="py-12 bg-background">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Book Your Appointment</h2>
-            <p className="text-muted-foreground mb-6">Fill in the details below and we'll get back to you shortly</p>
-          </div>
-        </section>
         <Features />
         <PopularTests />
         <AppointmentForm />
